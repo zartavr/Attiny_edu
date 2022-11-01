@@ -1,0 +1,427 @@
+
+3461AS 4x_indicator.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001ea  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000023e  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  0000023e  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000270  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000048  00000000  00000000  000002b0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000774  00000000  00000000  000002f8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005b3  00000000  00000000  00000a6c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000039d  00000000  00000000  0000101f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000088  00000000  00000000  000013bc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    0000038c  00000000  00000000  00001444  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000465  00000000  00000000  000017d0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000038  00000000  00000000  00001c35  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	1e c0       	rjmp	.+60     	; 0x3e <__ctors_end>
+   2:	23 c0       	rjmp	.+70     	; 0x4a <__bad_interrupt>
+   4:	22 c0       	rjmp	.+68     	; 0x4a <__bad_interrupt>
+   6:	21 c0       	rjmp	.+66     	; 0x4a <__bad_interrupt>
+   8:	20 c0       	rjmp	.+64     	; 0x4a <__bad_interrupt>
+   a:	1f c0       	rjmp	.+62     	; 0x4a <__bad_interrupt>
+   c:	1e c0       	rjmp	.+60     	; 0x4a <__bad_interrupt>
+   e:	1d c0       	rjmp	.+58     	; 0x4a <__bad_interrupt>
+  10:	1c c0       	rjmp	.+56     	; 0x4a <__bad_interrupt>
+  12:	1b c0       	rjmp	.+54     	; 0x4a <__bad_interrupt>
+  14:	1a c0       	rjmp	.+52     	; 0x4a <__bad_interrupt>
+  16:	19 c0       	rjmp	.+50     	; 0x4a <__bad_interrupt>
+  18:	18 c0       	rjmp	.+48     	; 0x4a <__bad_interrupt>
+  1a:	17 c0       	rjmp	.+46     	; 0x4a <__bad_interrupt>
+  1c:	16 c0       	rjmp	.+44     	; 0x4a <__bad_interrupt>
+  1e:	15 c0       	rjmp	.+42     	; 0x4a <__bad_interrupt>
+  20:	14 c0       	rjmp	.+40     	; 0x4a <__bad_interrupt>
+  22:	13 c0       	rjmp	.+38     	; 0x4a <__bad_interrupt>
+  24:	12 c0       	rjmp	.+36     	; 0x4a <__bad_interrupt>
+  26:	11 c0       	rjmp	.+34     	; 0x4a <__bad_interrupt>
+  28:	10 c0       	rjmp	.+32     	; 0x4a <__bad_interrupt>
+  2a:	3c c0       	rjmp	.+120    	; 0xa4 <ind_dict+0x38>
+  2c:	27 c0       	rjmp	.+78     	; 0x7c <ind_dict+0x10>
+  2e:	28 c0       	rjmp	.+80     	; 0x80 <ind_dict+0x14>
+  30:	29 c0       	rjmp	.+82     	; 0x84 <ind_dict+0x18>
+  32:	2a c0       	rjmp	.+84     	; 0x88 <ind_dict+0x1c>
+  34:	2b c0       	rjmp	.+86     	; 0x8c <ind_dict+0x20>
+  36:	2c c0       	rjmp	.+88     	; 0x90 <ind_dict+0x24>
+  38:	2d c0       	rjmp	.+90     	; 0x94 <ind_dict+0x28>
+  3a:	2e c0       	rjmp	.+92     	; 0x98 <ind_dict+0x2c>
+  3c:	2f c0       	rjmp	.+94     	; 0x9c <ind_dict+0x30>
+
+0000003e <__ctors_end>:
+  3e:	11 24       	eor	r1, r1
+  40:	1f be       	out	0x3f, r1	; 63
+  42:	cf ed       	ldi	r28, 0xDF	; 223
+  44:	cd bf       	out	0x3d, r28	; 61
+  46:	93 d0       	rcall	.+294    	; 0x16e <main>
+  48:	ce c0       	rjmp	.+412    	; 0x1e6 <_exit>
+
+0000004a <__bad_interrupt>:
+  4a:	da cf       	rjmp	.-76     	; 0x0 <__vectors>
+
+0000004c <indicator_3461AS_init>:
+    }
+}
+
+void indicator_3461AS_init()
+{
+	port_cathode_dir |= (1<<seg1)|(1<<seg2)|(1<<seg3)|(1<<seg4); //Настраиваем пины катодов на выход
+  4c:	81 b3       	in	r24, 0x11	; 17
+  4e:	8c 63       	ori	r24, 0x3C	; 60
+  50:	81 bb       	out	0x11, r24	; 17
+	port_anode_dir |= (1<<led_a)|(1<<led_b)|(1<<led_c)|(1<<led_d)|(1<<led_e)|(1<<led_f)|(1<<led_g)|(1<<led_dp); //Настраиваем пины анодов на выход
+  52:	87 b3       	in	r24, 0x17	; 23
+  54:	8f ef       	ldi	r24, 0xFF	; 255
+  56:	87 bb       	out	0x17, r24	; 23
+	port_anode &= 0b00000000;
+  58:	88 b3       	in	r24, 0x18	; 24
+  5a:	18 ba       	out	0x18, r1	; 24
+	port_cathode &= 0b00000000;
+  5c:	82 b3       	in	r24, 0x12	; 18
+  5e:	12 ba       	out	0x12, r1	; 18
+  60:	08 95       	ret
+
+00000062 <ind_dot_on>:
+	port_anode &= 0b00000000;
+	port_cathode &= 0b00000000;
+}
+
+void ind_dot_on(void){
+	port_anode |= (1<<led_dp);
+  62:	c7 9a       	sbi	0x18, 7	; 24
+  64:	08 95       	ret
+
+00000066 <ind_dot_off>:
+}
+
+void ind_dot_off(void){
+	port_anode |= (0<<led_dp);
+  66:	88 b3       	in	r24, 0x18	; 24
+  68:	88 bb       	out	0x18, r24	; 24
+  6a:	08 95       	ret
+
+0000006c <ind_dict>:
+}
+
+char ind_dict(char figure)
+{
+	switch (figure){
+  6c:	90 e0       	ldi	r25, 0x00	; 0
+  6e:	8a 30       	cpi	r24, 0x0A	; 10
+  70:	91 05       	cpc	r25, r1
+  72:	b0 f4       	brcc	.+44     	; 0xa0 <ind_dict+0x34>
+  74:	fc 01       	movw	r30, r24
+  76:	eb 5e       	subi	r30, 0xEB	; 235
+  78:	ff 4f       	sbci	r31, 0xFF	; 255
+  7a:	09 94       	ijmp
+		case 0: return (1<<led_a)|(1<<led_b)|(1<<led_c)|(1<<led_d)|(1<<led_e)|(1<<led_f);
+		case 1: return (1<<led_b)|(1<<led_c);
+  7c:	86 e0       	ldi	r24, 0x06	; 6
+  7e:	08 95       	ret
+		case 2: return (1<<led_a)|(1<<led_b)|(1<<led_d)|(1<<led_e)|(1<<led_g);
+  80:	8b e5       	ldi	r24, 0x5B	; 91
+  82:	08 95       	ret
+		case 3: return (1<<led_a)|(1<<led_b)|(1<<led_c)|(1<<led_d)|(1<<led_g);
+  84:	8f e4       	ldi	r24, 0x4F	; 79
+  86:	08 95       	ret
+		case 4: return (1<<led_b)|(1<<led_c)|(1<<led_f)|(1<<led_g);
+  88:	86 e6       	ldi	r24, 0x66	; 102
+  8a:	08 95       	ret
+		case 5: return (1<<led_a)|(1<<led_c)|(1<<led_d)|(1<<led_f)|(1<<led_g);
+  8c:	8d e6       	ldi	r24, 0x6D	; 109
+  8e:	08 95       	ret
+		case 6: return (1<<led_a)|(1<<led_c)|(1<<led_d)|(1<<led_e)|(1<<led_f)|(1<<led_g);
+  90:	8d e7       	ldi	r24, 0x7D	; 125
+  92:	08 95       	ret
+		case 7: return (1<<led_a)|(1<<led_b)|(1<<led_c);
+  94:	87 e0       	ldi	r24, 0x07	; 7
+  96:	08 95       	ret
+		case 8: return (1<<led_a)|(1<<led_b)|(1<<led_c)|(1<<led_d)|(1<<led_e)|(1<<led_f)|(1<<led_g);
+  98:	8f e7       	ldi	r24, 0x7F	; 127
+  9a:	08 95       	ret
+		case 9: return (1<<led_a)|(1<<led_b)|(1<<led_c)|(1<<led_d)|(1<<led_f)|(1<<led_g);
+  9c:	8f e6       	ldi	r24, 0x6F	; 111
+  9e:	08 95       	ret
+		default: return 0;
+  a0:	80 e0       	ldi	r24, 0x00	; 0
+  a2:	08 95       	ret
+}
+
+char ind_dict(char figure)
+{
+	switch (figure){
+		case 0: return (1<<led_a)|(1<<led_b)|(1<<led_c)|(1<<led_d)|(1<<led_e)|(1<<led_f);
+  a4:	8f e3       	ldi	r24, 0x3F	; 63
+		case 7: return (1<<led_a)|(1<<led_b)|(1<<led_c);
+		case 8: return (1<<led_a)|(1<<led_b)|(1<<led_c)|(1<<led_d)|(1<<led_e)|(1<<led_f)|(1<<led_g);
+		case 9: return (1<<led_a)|(1<<led_b)|(1<<led_c)|(1<<led_d)|(1<<led_f)|(1<<led_g);
+		default: return 0;
+	}
+}
+  a6:	08 95       	ret
+
+000000a8 <ind_print>:
+	port_anode &= 0b00000000;
+	port_cathode &= 0b00000000;
+}
+
+void ind_print(int number)
+{
+  a8:	0f 93       	push	r16
+  aa:	1f 93       	push	r17
+  ac:	cf 93       	push	r28
+  ae:	df 93       	push	r29
+  b0:	8c 01       	movw	r16, r24
+	int fig1 = number / 1000;
+	int fig2 = number / 100 % 10;
+	int fig3 = number / 10 % 10;
+	int fig4 = number % 10;
+	
+	port_anode |= ind_dict(fig1);
+  b2:	68 ee       	ldi	r22, 0xE8	; 232
+  b4:	73 e0       	ldi	r23, 0x03	; 3
+  b6:	70 d0       	rcall	.+224    	; 0x198 <__divmodhi4>
+  b8:	86 2f       	mov	r24, r22
+  ba:	d8 df       	rcall	.-80     	; 0x6c <ind_dict>
+  bc:	98 b3       	in	r25, 0x18	; 24
+  be:	89 2b       	or	r24, r25
+  c0:	88 bb       	out	0x18, r24	; 24
+	port_cathode |= (0<<seg1)|(1<<seg2)|(1<<seg3)|(1<<seg4);
+  c2:	82 b3       	in	r24, 0x12	; 18
+  c4:	8c 61       	ori	r24, 0x1C	; 28
+  c6:	82 bb       	out	0x12, r24	; 18
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  c8:	8f e1       	ldi	r24, 0x1F	; 31
+  ca:	93 e0       	ldi	r25, 0x03	; 3
+  cc:	01 97       	sbiw	r24, 0x01	; 1
+  ce:	f1 f7       	brne	.-4      	; 0xcc <ind_print+0x24>
+  d0:	00 c0       	rjmp	.+0      	; 0xd2 <ind_print+0x2a>
+  d2:	00 00       	nop
+	_delay_us(pause_us);
+	port_anode &= 0b00000000;
+  d4:	88 b3       	in	r24, 0x18	; 24
+  d6:	18 ba       	out	0x18, r1	; 24
+	port_cathode &= 0b00000000;
+  d8:	82 b3       	in	r24, 0x12	; 18
+  da:	12 ba       	out	0x12, r1	; 18
+	port_anode |= ind_dict(fig2);
+  dc:	c8 01       	movw	r24, r16
+  de:	64 e6       	ldi	r22, 0x64	; 100
+  e0:	70 e0       	ldi	r23, 0x00	; 0
+  e2:	5a d0       	rcall	.+180    	; 0x198 <__divmodhi4>
+  e4:	cb 01       	movw	r24, r22
+  e6:	ca e0       	ldi	r28, 0x0A	; 10
+  e8:	d0 e0       	ldi	r29, 0x00	; 0
+  ea:	be 01       	movw	r22, r28
+  ec:	55 d0       	rcall	.+170    	; 0x198 <__divmodhi4>
+  ee:	be df       	rcall	.-132    	; 0x6c <ind_dict>
+  f0:	98 b3       	in	r25, 0x18	; 24
+  f2:	89 2b       	or	r24, r25
+  f4:	88 bb       	out	0x18, r24	; 24
+	port_cathode |= (1<<seg1)|(0<<seg2)|(1<<seg3)|(1<<seg4);
+  f6:	82 b3       	in	r24, 0x12	; 18
+  f8:	8c 62       	ori	r24, 0x2C	; 44
+  fa:	82 bb       	out	0x12, r24	; 18
+  fc:	8f e1       	ldi	r24, 0x1F	; 31
+  fe:	93 e0       	ldi	r25, 0x03	; 3
+ 100:	01 97       	sbiw	r24, 0x01	; 1
+ 102:	f1 f7       	brne	.-4      	; 0x100 <__stack+0x21>
+ 104:	00 c0       	rjmp	.+0      	; 0x106 <__stack+0x27>
+ 106:	00 00       	nop
+	_delay_us(pause_us);
+	port_anode &= 0b00000000;
+ 108:	88 b3       	in	r24, 0x18	; 24
+ 10a:	18 ba       	out	0x18, r1	; 24
+	port_cathode &= 0b00000000;
+ 10c:	82 b3       	in	r24, 0x12	; 18
+ 10e:	12 ba       	out	0x12, r1	; 18
+	port_anode |= ind_dict(fig3);
+ 110:	c8 01       	movw	r24, r16
+ 112:	be 01       	movw	r22, r28
+ 114:	41 d0       	rcall	.+130    	; 0x198 <__divmodhi4>
+ 116:	18 2f       	mov	r17, r24
+ 118:	cb 01       	movw	r24, r22
+ 11a:	be 01       	movw	r22, r28
+ 11c:	3d d0       	rcall	.+122    	; 0x198 <__divmodhi4>
+ 11e:	a6 df       	rcall	.-180    	; 0x6c <ind_dict>
+ 120:	98 b3       	in	r25, 0x18	; 24
+ 122:	89 2b       	or	r24, r25
+ 124:	88 bb       	out	0x18, r24	; 24
+	port_cathode |= (1<<seg1)|(1<<seg2)|(0<<seg3)|(1<<seg4);
+ 126:	82 b3       	in	r24, 0x12	; 18
+ 128:	84 63       	ori	r24, 0x34	; 52
+ 12a:	82 bb       	out	0x12, r24	; 18
+ 12c:	8f e1       	ldi	r24, 0x1F	; 31
+ 12e:	93 e0       	ldi	r25, 0x03	; 3
+ 130:	01 97       	sbiw	r24, 0x01	; 1
+ 132:	f1 f7       	brne	.-4      	; 0x130 <__stack+0x51>
+ 134:	00 c0       	rjmp	.+0      	; 0x136 <__stack+0x57>
+ 136:	00 00       	nop
+	_delay_us(pause_us);
+	port_anode &= 0b00000000;
+ 138:	88 b3       	in	r24, 0x18	; 24
+ 13a:	18 ba       	out	0x18, r1	; 24
+	port_cathode &= 0b00000000;
+ 13c:	82 b3       	in	r24, 0x12	; 18
+ 13e:	12 ba       	out	0x12, r1	; 18
+	port_anode |= ind_dict(fig4);
+ 140:	81 2f       	mov	r24, r17
+ 142:	94 df       	rcall	.-216    	; 0x6c <ind_dict>
+ 144:	98 b3       	in	r25, 0x18	; 24
+ 146:	89 2b       	or	r24, r25
+ 148:	88 bb       	out	0x18, r24	; 24
+	port_cathode |= (1<<seg1)|(1<<seg2)|(1<<seg3)|(0<<seg4);
+ 14a:	82 b3       	in	r24, 0x12	; 18
+ 14c:	88 63       	ori	r24, 0x38	; 56
+ 14e:	82 bb       	out	0x12, r24	; 18
+ 150:	8f e1       	ldi	r24, 0x1F	; 31
+ 152:	93 e0       	ldi	r25, 0x03	; 3
+ 154:	01 97       	sbiw	r24, 0x01	; 1
+ 156:	f1 f7       	brne	.-4      	; 0x154 <__stack+0x75>
+ 158:	00 c0       	rjmp	.+0      	; 0x15a <__stack+0x7b>
+ 15a:	00 00       	nop
+	_delay_us(pause_us);
+	port_anode &= 0b00000000;
+ 15c:	88 b3       	in	r24, 0x18	; 24
+ 15e:	18 ba       	out	0x18, r1	; 24
+	port_cathode &= 0b00000000;
+ 160:	82 b3       	in	r24, 0x12	; 18
+ 162:	12 ba       	out	0x12, r1	; 18
+}
+ 164:	df 91       	pop	r29
+ 166:	cf 91       	pop	r28
+ 168:	1f 91       	pop	r17
+ 16a:	0f 91       	pop	r16
+ 16c:	08 95       	ret
+
+0000016e <main>:
+void ind_dot_on(void);
+void ind_dot_off(void);
+
+int main(void)
+{
+	indicator_3461AS_init();
+ 16e:	6e df       	rcall	.-292    	; 0x4c <indicator_3461AS_init>
+    /* Replace with your application code */
+    while (1) 
+    {
+		for (int i = 0; i <= 9999; i++){
+			ind_print(i);
+			if (i / 1000 % 2 == 0){
+ 170:	08 ee       	ldi	r16, 0xE8	; 232
+ 172:	13 e0       	ldi	r17, 0x03	; 3
+{
+	indicator_3461AS_init();
+    /* Replace with your application code */
+    while (1) 
+    {
+		for (int i = 0; i <= 9999; i++){
+ 174:	c0 e0       	ldi	r28, 0x00	; 0
+ 176:	d0 e0       	ldi	r29, 0x00	; 0
+			ind_print(i);
+ 178:	ce 01       	movw	r24, r28
+ 17a:	96 df       	rcall	.-212    	; 0xa8 <ind_print>
+			if (i / 1000 % 2 == 0){
+ 17c:	ce 01       	movw	r24, r28
+ 17e:	b8 01       	movw	r22, r16
+ 180:	0b d0       	rcall	.+22     	; 0x198 <__divmodhi4>
+ 182:	60 fd       	sbrc	r22, 0
+ 184:	02 c0       	rjmp	.+4      	; 0x18a <main+0x1c>
+				ind_dot_on();
+ 186:	6d df       	rcall	.-294    	; 0x62 <ind_dot_on>
+ 188:	01 c0       	rjmp	.+2      	; 0x18c <main+0x1e>
+			}
+			else{
+				ind_dot_off();
+ 18a:	6d df       	rcall	.-294    	; 0x66 <ind_dot_off>
+{
+	indicator_3461AS_init();
+    /* Replace with your application code */
+    while (1) 
+    {
+		for (int i = 0; i <= 9999; i++){
+ 18c:	21 96       	adiw	r28, 0x01	; 1
+ 18e:	c0 31       	cpi	r28, 0x10	; 16
+ 190:	87 e2       	ldi	r24, 0x27	; 39
+ 192:	d8 07       	cpc	r29, r24
+ 194:	89 f7       	brne	.-30     	; 0x178 <main+0xa>
+ 196:	ee cf       	rjmp	.-36     	; 0x174 <main+0x6>
+
+00000198 <__divmodhi4>:
+ 198:	97 fb       	bst	r25, 7
+ 19a:	07 2e       	mov	r0, r23
+ 19c:	16 f4       	brtc	.+4      	; 0x1a2 <__divmodhi4+0xa>
+ 19e:	00 94       	com	r0
+ 1a0:	06 d0       	rcall	.+12     	; 0x1ae <__divmodhi4_neg1>
+ 1a2:	77 fd       	sbrc	r23, 7
+ 1a4:	08 d0       	rcall	.+16     	; 0x1b6 <__divmodhi4_neg2>
+ 1a6:	0b d0       	rcall	.+22     	; 0x1be <__udivmodhi4>
+ 1a8:	07 fc       	sbrc	r0, 7
+ 1aa:	05 d0       	rcall	.+10     	; 0x1b6 <__divmodhi4_neg2>
+ 1ac:	3e f4       	brtc	.+14     	; 0x1bc <__divmodhi4_exit>
+
+000001ae <__divmodhi4_neg1>:
+ 1ae:	90 95       	com	r25
+ 1b0:	81 95       	neg	r24
+ 1b2:	9f 4f       	sbci	r25, 0xFF	; 255
+ 1b4:	08 95       	ret
+
+000001b6 <__divmodhi4_neg2>:
+ 1b6:	70 95       	com	r23
+ 1b8:	61 95       	neg	r22
+ 1ba:	7f 4f       	sbci	r23, 0xFF	; 255
+
+000001bc <__divmodhi4_exit>:
+ 1bc:	08 95       	ret
+
+000001be <__udivmodhi4>:
+ 1be:	aa 1b       	sub	r26, r26
+ 1c0:	bb 1b       	sub	r27, r27
+ 1c2:	51 e1       	ldi	r21, 0x11	; 17
+ 1c4:	07 c0       	rjmp	.+14     	; 0x1d4 <__udivmodhi4_ep>
+
+000001c6 <__udivmodhi4_loop>:
+ 1c6:	aa 1f       	adc	r26, r26
+ 1c8:	bb 1f       	adc	r27, r27
+ 1ca:	a6 17       	cp	r26, r22
+ 1cc:	b7 07       	cpc	r27, r23
+ 1ce:	10 f0       	brcs	.+4      	; 0x1d4 <__udivmodhi4_ep>
+ 1d0:	a6 1b       	sub	r26, r22
+ 1d2:	b7 0b       	sbc	r27, r23
+
+000001d4 <__udivmodhi4_ep>:
+ 1d4:	88 1f       	adc	r24, r24
+ 1d6:	99 1f       	adc	r25, r25
+ 1d8:	5a 95       	dec	r21
+ 1da:	a9 f7       	brne	.-22     	; 0x1c6 <__udivmodhi4_loop>
+ 1dc:	80 95       	com	r24
+ 1de:	90 95       	com	r25
+ 1e0:	bc 01       	movw	r22, r24
+ 1e2:	cd 01       	movw	r24, r26
+ 1e4:	08 95       	ret
+
+000001e6 <_exit>:
+ 1e6:	f8 94       	cli
+
+000001e8 <__stop_program>:
+ 1e8:	ff cf       	rjmp	.-2      	; 0x1e8 <__stop_program>

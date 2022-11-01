@@ -1,0 +1,634 @@
+
+lcd_hd44780_pcf8574.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000002b0  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000304  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000304  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000334  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000080  00000000  00000000  00000374  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000dfb  00000000  00000000  000003f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005f8  00000000  00000000  000011ef  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000613  00000000  00000000  000017e7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000114  00000000  00000000  00001dfc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000003ca  00000000  00000000  00001f10  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000006b8  00000000  00000000  000022da  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000070  00000000  00000000  00002992  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	14 c0       	rjmp	.+40     	; 0x2a <__ctors_end>
+   2:	19 c0       	rjmp	.+50     	; 0x36 <__bad_interrupt>
+   4:	18 c0       	rjmp	.+48     	; 0x36 <__bad_interrupt>
+   6:	17 c0       	rjmp	.+46     	; 0x36 <__bad_interrupt>
+   8:	16 c0       	rjmp	.+44     	; 0x36 <__bad_interrupt>
+   a:	15 c0       	rjmp	.+42     	; 0x36 <__bad_interrupt>
+   c:	15 c0       	rjmp	.+42     	; 0x38 <__vector_6>
+   e:	13 c0       	rjmp	.+38     	; 0x36 <__bad_interrupt>
+  10:	12 c0       	rjmp	.+36     	; 0x36 <__bad_interrupt>
+  12:	11 c0       	rjmp	.+34     	; 0x36 <__bad_interrupt>
+  14:	10 c0       	rjmp	.+32     	; 0x36 <__bad_interrupt>
+  16:	0f c0       	rjmp	.+30     	; 0x36 <__bad_interrupt>
+  18:	0e c0       	rjmp	.+28     	; 0x36 <__bad_interrupt>
+  1a:	0d c0       	rjmp	.+26     	; 0x36 <__bad_interrupt>
+  1c:	0c c0       	rjmp	.+24     	; 0x36 <__bad_interrupt>
+  1e:	0b c0       	rjmp	.+22     	; 0x36 <__bad_interrupt>
+  20:	0a c0       	rjmp	.+20     	; 0x36 <__bad_interrupt>
+  22:	09 c0       	rjmp	.+18     	; 0x36 <__bad_interrupt>
+  24:	08 c0       	rjmp	.+16     	; 0x36 <__bad_interrupt>
+  26:	07 c0       	rjmp	.+14     	; 0x36 <__bad_interrupt>
+  28:	06 c0       	rjmp	.+12     	; 0x36 <__bad_interrupt>
+
+0000002a <__ctors_end>:
+  2a:	11 24       	eor	r1, r1
+  2c:	1f be       	out	0x3f, r1	; 63
+  2e:	cf ed       	ldi	r28, 0xDF	; 223
+  30:	cd bf       	out	0x3d, r28	; 61
+  32:	01 d1       	rcall	.+514    	; 0x236 <main>
+  34:	3b c1       	rjmp	.+630    	; 0x2ac <_exit>
+
+00000036 <__bad_interrupt>:
+  36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
+
+00000038 <__vector_6>:
+		unsigned char mes = uart_receive();
+		uart_send(mes);
+	}
+}
+
+ISR(TIMER0_OVF_vect){
+  38:	1f 92       	push	r1
+  3a:	0f 92       	push	r0
+  3c:	0f b6       	in	r0, 0x3f	; 63
+  3e:	0f 92       	push	r0
+  40:	11 24       	eor	r1, r1
+  42:	8f 93       	push	r24
+  44:	9f 93       	push	r25
+	heart_led_port ^= (1<<heart_led);
+  46:	98 b3       	in	r25, 0x18	; 24
+  48:	81 e0       	ldi	r24, 0x01	; 1
+  4a:	89 27       	eor	r24, r25
+  4c:	88 bb       	out	0x18, r24	; 24
+}
+  4e:	9f 91       	pop	r25
+  50:	8f 91       	pop	r24
+  52:	0f 90       	pop	r0
+  54:	0f be       	out	0x3f, r0	; 63
+  56:	0f 90       	pop	r0
+  58:	1f 90       	pop	r1
+  5a:	18 95       	reti
+
+0000005c <uart_init>:
+
+void uart_init(void){
+	/* Set baud rate */
+	//9600, 8-bit, 2-stop bit, even parity
+	UBRRL = 12;
+  5c:	8c e0       	ldi	r24, 0x0C	; 12
+  5e:	89 b9       	out	0x09, r24	; 9
+	UCSRA |= (1<<U2X);
+  60:	59 9a       	sbi	0x0b, 1	; 11
+	/* Enable receiver and transmitter */
+	UCSRB |= (1<<RXEN)|(1<<TXEN);
+  62:	8a b1       	in	r24, 0x0a	; 10
+  64:	88 61       	ori	r24, 0x18	; 24
+  66:	8a b9       	out	0x0a, r24	; 10
+	UCSRC |= (1<<USBS)|(3<<UCSZ0)|(1<<UPM1);
+  68:	83 b1       	in	r24, 0x03	; 3
+  6a:	8e 62       	ori	r24, 0x2E	; 46
+  6c:	83 b9       	out	0x03, r24	; 3
+  6e:	08 95       	ret
+
+00000070 <uart_send>:
+}
+
+void uart_send(unsigned char data )
+{
+	/* Wait for empty transmit buffer */
+	while ( !( UCSRA & (1<<UDRE)) );
+  70:	5d 9b       	sbis	0x0b, 5	; 11
+  72:	fe cf       	rjmp	.-4      	; 0x70 <uart_send>
+	/* Put data into buffer, sends the data */
+	UDR = data;
+  74:	8c b9       	out	0x0c, r24	; 12
+  76:	08 95       	ret
+
+00000078 <uart_receive>:
+}
+
+unsigned char uart_receive(void)
+{
+	/* Wait for data to be received */
+	while ( !(UCSRA & (1<<RXC)) );
+  78:	5f 9b       	sbis	0x0b, 7	; 11
+  7a:	fe cf       	rjmp	.-4      	; 0x78 <uart_receive>
+	/* Get and return received data from buffer */
+	return UDR;
+  7c:	8c b1       	in	r24, 0x0c	; 12
+}
+  7e:	08 95       	ret
+
+00000080 <i2c_init>:
+
+void i2c_init(void){
+	USI_DDR |= (1<<SDA)|(1<<SCL);
+  80:	87 b3       	in	r24, 0x17	; 23
+  82:	80 6a       	ori	r24, 0xA0	; 160
+  84:	87 bb       	out	0x17, r24	; 23
+	USI_PORT |= (1<<SCL);
+  86:	c7 9a       	sbi	0x18, 7	; 24
+	USI_PORT |= (1<<SDA);
+  88:	c5 9a       	sbi	0x18, 5	; 24
+	USIDR = 0xFF;
+  8a:	8f ef       	ldi	r24, 0xFF	; 255
+  8c:	8f b9       	out	0x0f, r24	; 15
+//	USICR = (1<<USIWM1)|(1<<USICS1)|(1<<USICLK);
+	USICR = (0 << USISIE) | (0 << USIOIE) | (1 << USIWM1) | (0 << USIWM0) | (1 << USICS1) | (0 << USICS0) | (1 << USICLK) | (0 << USITC);
+  8e:	8a e2       	ldi	r24, 0x2A	; 42
+  90:	8d b9       	out	0x0d, r24	; 13
+	USISR = (1 << USISIF) | (1 << USIOIF) | (1 << USIPF)  | (1 << USIDC)  | (0x00 << USICNT0);
+  92:	80 ef       	ldi	r24, 0xF0	; 240
+  94:	8e b9       	out	0x0e, r24	; 14
+  96:	08 95       	ret
+
+00000098 <i2c_start>:
+//	uart_send(USICR);
+// 	uart_send(USISR);
+}
+
+void i2c_start(void){
+	USI_PORT |= (1<<SCL);
+  98:	c7 9a       	sbi	0x18, 7	; 24
+	while(!(USI_PIN&(1<<SCL)));
+  9a:	b7 9b       	sbis	0x16, 7	; 22
+  9c:	fe cf       	rjmp	.-4      	; 0x9a <i2c_start+0x2>
+	USI_PORT &= ~(1<<SDA);
+  9e:	c5 98       	cbi	0x18, 5	; 24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  a0:	81 ee       	ldi	r24, 0xE1	; 225
+  a2:	94 e0       	ldi	r25, 0x04	; 4
+  a4:	01 97       	sbiw	r24, 0x01	; 1
+  a6:	f1 f7       	brne	.-4      	; 0xa4 <i2c_start+0xc>
+  a8:	00 c0       	rjmp	.+0      	; 0xaa <i2c_start+0x12>
+  aa:	00 00       	nop
+	_delay_ms(I2C_T);
+	USI_PORT &= ~(1<<SCL);
+  ac:	c7 98       	cbi	0x18, 7	; 24
+  ae:	81 ee       	ldi	r24, 0xE1	; 225
+  b0:	94 e0       	ldi	r25, 0x04	; 4
+  b2:	01 97       	sbiw	r24, 0x01	; 1
+  b4:	f1 f7       	brne	.-4      	; 0xb2 <i2c_start+0x1a>
+  b6:	00 c0       	rjmp	.+0      	; 0xb8 <i2c_start+0x20>
+  b8:	00 00       	nop
+	_delay_ms(I2C_T);
+	USI_PORT |= (1<<SDA);
+  ba:	c5 9a       	sbi	0x18, 5	; 24
+  bc:	08 95       	ret
+
+000000be <i2c_send>:
+//	uart_send(USI_PIN);
+//	uart_send(USISR);
+}
+
+void i2c_send(char data_byte){
+	USISR |= 0b11110000; // чистим флаги, чтобы отпустить линию SCL и начать передачу и устанавливаем счетчик на передачу 8 бит
+  be:	9e b1       	in	r25, 0x0e	; 14
+  c0:	90 6f       	ori	r25, 0xF0	; 240
+  c2:	9e b9       	out	0x0e, r25	; 14
+	USIDR = data_byte; // помещаем передаваемый байт в регистр передачи
+  c4:	8f b9       	out	0x0f, r24	; 15
+	uart_send(USIDR);
+  c6:	8f b1       	in	r24, 0x0f	; 15
+  c8:	d3 df       	rcall	.-90     	; 0x70 <uart_send>
+  ca:	81 ee       	ldi	r24, 0xE1	; 225
+  cc:	94 e0       	ldi	r25, 0x04	; 4
+  ce:	01 97       	sbiw	r24, 0x01	; 1
+  d0:	f1 f7       	brne	.-4      	; 0xce <i2c_send+0x10>
+  d2:	00 c0       	rjmp	.+0      	; 0xd4 <i2c_send+0x16>
+  d4:	00 00       	nop
+	do 
+	{
+		_delay_ms(I2C_T);
+		USICR |= (1<<USITC); // тик
+  d6:	68 9a       	sbi	0x0d, 0	; 13
+		while(!(USI_PIN&(1<<SCL))); // ждем высокого сигнала на SCL
+  d8:	b7 9b       	sbis	0x16, 7	; 22
+  da:	fe cf       	rjmp	.-4      	; 0xd8 <i2c_send+0x1a>
+  dc:	81 ee       	ldi	r24, 0xE1	; 225
+  de:	94 e0       	ldi	r25, 0x04	; 4
+  e0:	01 97       	sbiw	r24, 0x01	; 1
+  e2:	f1 f7       	brne	.-4      	; 0xe0 <__stack+0x1>
+  e4:	00 c0       	rjmp	.+0      	; 0xe6 <__stack+0x7>
+  e6:	00 00       	nop
+		_delay_ms(I2C_T);
+		USICR |= (1<<USITC); // так;
+  e8:	68 9a       	sbi	0x0d, 0	; 13
+	} while (!(USISR&(1<<USIOIF)));
+  ea:	76 9b       	sbis	0x0e, 6	; 14
+  ec:	ee cf       	rjmp	.-36     	; 0xca <i2c_send+0xc>
+  ee:	81 ee       	ldi	r24, 0xE1	; 225
+  f0:	94 e0       	ldi	r25, 0x04	; 4
+  f2:	01 97       	sbiw	r24, 0x01	; 1
+  f4:	f1 f7       	brne	.-4      	; 0xf2 <__stack+0x13>
+  f6:	00 c0       	rjmp	.+0      	; 0xf8 <__stack+0x19>
+  f8:	00 00       	nop
+  fa:	08 95       	ret
+
+000000fc <i2c_get_ack>:
+	_delay_ms(I2C_T);
+//	uart_send(USISR);
+}
+
+char i2c_get_ack(void){
+  fc:	cf 93       	push	r28
+	USISR |= 0b11111110;
+  fe:	8e b1       	in	r24, 0x0e	; 14
+ 100:	8e 6f       	ori	r24, 0xFE	; 254
+ 102:	8e b9       	out	0x0e, r24	; 14
+	USIDR = 0xFF;
+ 104:	8f ef       	ldi	r24, 0xFF	; 255
+ 106:	8f b9       	out	0x0f, r24	; 15
+	USI_DDR &= ~(1<<SDA); // лини€ данных настроена на вход
+ 108:	bd 98       	cbi	0x17, 5	; 23
+ 10a:	81 ee       	ldi	r24, 0xE1	; 225
+ 10c:	94 e0       	ldi	r25, 0x04	; 4
+ 10e:	01 97       	sbiw	r24, 0x01	; 1
+ 110:	f1 f7       	brne	.-4      	; 0x10e <i2c_get_ack+0x12>
+ 112:	00 c0       	rjmp	.+0      	; 0x114 <i2c_get_ack+0x18>
+ 114:	00 00       	nop
+	do
+	{
+		_delay_ms(I2C_T);
+		USICR |= (1<<USITC); // тик
+ 116:	68 9a       	sbi	0x0d, 0	; 13
+		while(!(USI_PIN&(1<<SCL))); // ждем высокого сигнала на SCL
+ 118:	b7 9b       	sbis	0x16, 7	; 22
+ 11a:	fe cf       	rjmp	.-4      	; 0x118 <i2c_get_ack+0x1c>
+ 11c:	81 ee       	ldi	r24, 0xE1	; 225
+ 11e:	94 e0       	ldi	r25, 0x04	; 4
+ 120:	01 97       	sbiw	r24, 0x01	; 1
+ 122:	f1 f7       	brne	.-4      	; 0x120 <i2c_get_ack+0x24>
+ 124:	00 c0       	rjmp	.+0      	; 0x126 <i2c_get_ack+0x2a>
+ 126:	00 00       	nop
+		_delay_ms(I2C_T);
+		USICR |= (1<<USITC); // так;
+ 128:	68 9a       	sbi	0x0d, 0	; 13
+	} while (!(USISR&(1<<USIOIF)));
+ 12a:	76 9b       	sbis	0x0e, 6	; 14
+ 12c:	ee cf       	rjmp	.-36     	; 0x10a <i2c_get_ack+0xe>
+	USI_DDR |= (1<<SDA); // лини€ данных настроена на выход
+ 12e:	bd 9a       	sbi	0x17, 5	; 23
+	char res = USIDR;
+ 130:	cf b1       	in	r28, 0x0f	; 15
+	uart_send(res);
+ 132:	8c 2f       	mov	r24, r28
+ 134:	9d df       	rcall	.-198    	; 0x70 <uart_send>
+	return (res);
+}
+ 136:	8c 2f       	mov	r24, r28
+ 138:	cf 91       	pop	r28
+ 13a:	08 95       	ret
+
+0000013c <i2c_stop>:
+
+//dont work from example
+void i2c_stop(void){
+	USISR = 0b11110000;
+ 13c:	80 ef       	ldi	r24, 0xF0	; 240
+ 13e:	8e b9       	out	0x0e, r24	; 14
+	USIDR = 0x00;
+ 140:	1f b8       	out	0x0f, r1	; 15
+	USI_PORT &= ~(1<<SDA);
+ 142:	c5 98       	cbi	0x18, 5	; 24
+ 144:	81 ee       	ldi	r24, 0xE1	; 225
+ 146:	94 e0       	ldi	r25, 0x04	; 4
+ 148:	01 97       	sbiw	r24, 0x01	; 1
+ 14a:	f1 f7       	brne	.-4      	; 0x148 <i2c_stop+0xc>
+ 14c:	00 c0       	rjmp	.+0      	; 0x14e <i2c_stop+0x12>
+ 14e:	00 00       	nop
+//  uart_send(USI_PIN);
+	_delay_ms(I2C_T);
+	USIDR = 0xFF;
+ 150:	8f ef       	ldi	r24, 0xFF	; 255
+ 152:	8f b9       	out	0x0f, r24	; 15
+	USI_PORT |= (1<<SCL);
+ 154:	c7 9a       	sbi	0x18, 7	; 24
+//	uart_send(USI_PIN);
+	while(!(USI_PIN&(1<<SCL)));
+ 156:	b7 9b       	sbis	0x16, 7	; 22
+ 158:	fe cf       	rjmp	.-4      	; 0x156 <i2c_stop+0x1a>
+ 15a:	81 ee       	ldi	r24, 0xE1	; 225
+ 15c:	94 e0       	ldi	r25, 0x04	; 4
+ 15e:	01 97       	sbiw	r24, 0x01	; 1
+ 160:	f1 f7       	brne	.-4      	; 0x15e <i2c_stop+0x22>
+ 162:	00 c0       	rjmp	.+0      	; 0x164 <i2c_stop+0x28>
+ 164:	00 00       	nop
+	_delay_ms(I2C_T);
+	USI_PORT |= (1<<SDA);
+ 166:	c5 9a       	sbi	0x18, 5	; 24
+ 168:	81 ee       	ldi	r24, 0xE1	; 225
+ 16a:	94 e0       	ldi	r25, 0x04	; 4
+ 16c:	01 97       	sbiw	r24, 0x01	; 1
+ 16e:	f1 f7       	brne	.-4      	; 0x16c <i2c_stop+0x30>
+ 170:	00 c0       	rjmp	.+0      	; 0x172 <i2c_stop+0x36>
+ 172:	00 00       	nop
+ 174:	08 95       	ret
+
+00000176 <lcd_write>:
+	
+	lcd_write(0b00000000);
+	lcd_write(0b01101000);	
+}
+
+void lcd_write(char data){
+ 176:	cf 93       	push	r28
+ 178:	c8 2f       	mov	r28, r24
+	char data_e1 = data|(1<<2);
+	char data_e0 = data&(~(1<<2));
+//	uart_send(data_e1);
+	i2c_send(data_e1);
+ 17a:	84 60       	ori	r24, 0x04	; 4
+ 17c:	a0 df       	rcall	.-192    	; 0xbe <i2c_send>
+	i2c_get_ack();
+ 17e:	be df       	rcall	.-132    	; 0xfc <i2c_get_ack>
+ 180:	81 ee       	ldi	r24, 0xE1	; 225
+ 182:	94 e0       	ldi	r25, 0x04	; 4
+ 184:	01 97       	sbiw	r24, 0x01	; 1
+ 186:	f1 f7       	brne	.-4      	; 0x184 <lcd_write+0xe>
+ 188:	00 c0       	rjmp	.+0      	; 0x18a <lcd_write+0x14>
+ 18a:	00 00       	nop
+	_delay_ms(5);
+//	uart_send(data_e0);
+	i2c_send(data_e0);
+ 18c:	8c 2f       	mov	r24, r28
+ 18e:	8b 7f       	andi	r24, 0xFB	; 251
+ 190:	96 df       	rcall	.-212    	; 0xbe <i2c_send>
+	i2c_get_ack();	
+ 192:	b4 df       	rcall	.-152    	; 0xfc <i2c_get_ack>
+}
+ 194:	cf 91       	pop	r28
+ 196:	08 95       	ret
+
+00000198 <lcd_init>:
+	_delay_ms(I2C_T);
+//	uart_send(USISR);
+}
+
+void lcd_init(void){
+	i2c_send(0b00000000);
+ 198:	80 e0       	ldi	r24, 0x00	; 0
+ 19a:	91 df       	rcall	.-222    	; 0xbe <i2c_send>
+	uart_send(i2c_get_ack());
+ 19c:	af df       	rcall	.-162    	; 0xfc <i2c_get_ack>
+ 19e:	68 df       	rcall	.-304    	; 0x70 <uart_send>
+ 1a0:	87 e8       	ldi	r24, 0x87	; 135
+ 1a2:	93 e1       	ldi	r25, 0x13	; 19
+ 1a4:	01 97       	sbiw	r24, 0x01	; 1
+ 1a6:	f1 f7       	brne	.-4      	; 0x1a4 <lcd_init+0xc>
+ 1a8:	00 c0       	rjmp	.+0      	; 0x1aa <lcd_init+0x12>
+ 1aa:	00 00       	nop
+	_delay_ms(20);
+	
+	lcd_write(0b00110000);
+ 1ac:	80 e3       	ldi	r24, 0x30	; 48
+ 1ae:	e3 df       	rcall	.-58     	; 0x176 <lcd_write>
+ 1b0:	81 ee       	ldi	r24, 0xE1	; 225
+ 1b2:	94 e0       	ldi	r25, 0x04	; 4
+ 1b4:	01 97       	sbiw	r24, 0x01	; 1
+ 1b6:	f1 f7       	brne	.-4      	; 0x1b4 <lcd_init+0x1c>
+ 1b8:	00 c0       	rjmp	.+0      	; 0x1ba <lcd_init+0x22>
+ 1ba:	00 00       	nop
+	_delay_ms(5);
+	lcd_write(0b00110000);
+ 1bc:	80 e3       	ldi	r24, 0x30	; 48
+ 1be:	db df       	rcall	.-74     	; 0x176 <lcd_write>
+ 1c0:	81 ee       	ldi	r24, 0xE1	; 225
+ 1c2:	94 e0       	ldi	r25, 0x04	; 4
+ 1c4:	01 97       	sbiw	r24, 0x01	; 1
+ 1c6:	f1 f7       	brne	.-4      	; 0x1c4 <lcd_init+0x2c>
+ 1c8:	00 c0       	rjmp	.+0      	; 0x1ca <lcd_init+0x32>
+ 1ca:	00 00       	nop
+	_delay_ms(5);
+	lcd_write(0b00110000);
+ 1cc:	80 e3       	ldi	r24, 0x30	; 48
+ 1ce:	d3 df       	rcall	.-90     	; 0x176 <lcd_write>
+ 1d0:	81 ee       	ldi	r24, 0xE1	; 225
+ 1d2:	94 e0       	ldi	r25, 0x04	; 4
+ 1d4:	01 97       	sbiw	r24, 0x01	; 1
+ 1d6:	f1 f7       	brne	.-4      	; 0x1d4 <lcd_init+0x3c>
+ 1d8:	00 c0       	rjmp	.+0      	; 0x1da <lcd_init+0x42>
+ 1da:	00 00       	nop
+	_delay_ms(5);
+	
+	lcd_write(0b00100000);
+ 1dc:	80 e2       	ldi	r24, 0x20	; 32
+ 1de:	cb df       	rcall	.-106    	; 0x176 <lcd_write>
+	
+	lcd_write(0b00100000);
+ 1e0:	80 e2       	ldi	r24, 0x20	; 32
+ 1e2:	c9 df       	rcall	.-110    	; 0x176 <lcd_write>
+	lcd_write(0b10000000);
+ 1e4:	80 e8       	ldi	r24, 0x80	; 128
+ 1e6:	c7 df       	rcall	.-114    	; 0x176 <lcd_write>
+	
+	lcd_write(0b00000000);
+ 1e8:	80 e0       	ldi	r24, 0x00	; 0
+ 1ea:	c5 df       	rcall	.-118    	; 0x176 <lcd_write>
+	lcd_write(0b11110000);
+ 1ec:	80 ef       	ldi	r24, 0xF0	; 240
+ 1ee:	c3 df       	rcall	.-122    	; 0x176 <lcd_write>
+	
+	lcd_write(0b00000000);
+ 1f0:	80 e0       	ldi	r24, 0x00	; 0
+ 1f2:	c1 df       	rcall	.-126    	; 0x176 <lcd_write>
+	lcd_write(0b00010000);
+ 1f4:	80 e1       	ldi	r24, 0x10	; 16
+ 1f6:	bf df       	rcall	.-130    	; 0x176 <lcd_write>
+	
+	lcd_write(0b00000000);
+ 1f8:	80 e0       	ldi	r24, 0x00	; 0
+ 1fa:	bd df       	rcall	.-134    	; 0x176 <lcd_write>
+	lcd_write(0b01101000);	
+ 1fc:	88 e6       	ldi	r24, 0x68	; 104
+ 1fe:	bb df       	rcall	.-138    	; 0x176 <lcd_write>
+ 200:	08 95       	ret
+
+00000202 <lcd_print>:
+//	uart_send(data_e0);
+	i2c_send(data_e0);
+	i2c_get_ack();	
+}
+
+void lcd_print(char symbol){
+ 202:	cf 93       	push	r28
+ 204:	df 93       	push	r29
+	char Hbyte = symbol & 0xF0;
+ 206:	d8 2f       	mov	r29, r24
+ 208:	d0 7f       	andi	r29, 0xF0	; 240
+	char Lbyte = symbol << 4;
+ 20a:	c8 2f       	mov	r28, r24
+ 20c:	c2 95       	swap	r28
+ 20e:	c0 7f       	andi	r28, 0xF0	; 240
+
+	i2c_send(Hbyte + 0x0D); // LED = 1 E = 1 RW = 0 RS = 1 
+ 210:	8d e0       	ldi	r24, 0x0D	; 13
+ 212:	8d 0f       	add	r24, r29
+ 214:	54 df       	rcall	.-344    	; 0xbe <i2c_send>
+	i2c_get_ack();
+ 216:	72 df       	rcall	.-284    	; 0xfc <i2c_get_ack>
+	i2c_send(Hbyte + 0x09); // LED = 1 E = 0 RW = 0 RS = 1 
+ 218:	89 e0       	ldi	r24, 0x09	; 9
+ 21a:	8d 0f       	add	r24, r29
+ 21c:	50 df       	rcall	.-352    	; 0xbe <i2c_send>
+	i2c_get_ack();
+ 21e:	6e df       	rcall	.-292    	; 0xfc <i2c_get_ack>
+
+	i2c_send(Lbyte + 0x0D); // LED = 1 E = 0 RW = 0 RS = 1 
+ 220:	8d e0       	ldi	r24, 0x0D	; 13
+ 222:	8c 0f       	add	r24, r28
+ 224:	4c df       	rcall	.-360    	; 0xbe <i2c_send>
+	i2c_get_ack();
+ 226:	6a df       	rcall	.-300    	; 0xfc <i2c_get_ack>
+	i2c_send(Lbyte + 0x09); // LED = 1 E = 0 RW = 0 RS = 1 
+ 228:	89 e0       	ldi	r24, 0x09	; 9
+ 22a:	8c 0f       	add	r24, r28
+ 22c:	48 df       	rcall	.-368    	; 0xbe <i2c_send>
+	i2c_get_ack();
+ 22e:	66 df       	rcall	.-308    	; 0xfc <i2c_get_ack>
+}
+ 230:	df 91       	pop	r29
+ 232:	cf 91       	pop	r28
+ 234:	08 95       	ret
+
+00000236 <main>:
+
+
+int main(void)
+{	
+	// Ќастройка таймера
+	TCCR0A = 0;
+ 236:	10 be       	out	0x30, r1	; 48
+	TCCR0B = (1<<CS02)|(0<<CS01)|(1<<CS00); //предделитель clk/1024, normal mode
+ 238:	85 e0       	ldi	r24, 0x05	; 5
+ 23a:	83 bf       	out	0x33, r24	; 51
+	TIMSK |= (1 << TOIE0); // –азрешение прерывани€ по совпадению
+ 23c:	89 b7       	in	r24, 0x39	; 57
+ 23e:	82 60       	ori	r24, 0x02	; 2
+ 240:	89 bf       	out	0x39, r24	; 57
+	// heart led как выход
+	heart_led_dir |= (1<<heart_led);
+ 242:	b8 9a       	sbi	0x17, 0	; 23
+	
+	uart_init();
+ 244:	0b df       	rcall	.-490    	; 0x5c <uart_init>
+ 246:	2f e3       	ldi	r18, 0x3F	; 63
+ 248:	8d e0       	ldi	r24, 0x0D	; 13
+ 24a:	93 e0       	ldi	r25, 0x03	; 3
+ 24c:	21 50       	subi	r18, 0x01	; 1
+ 24e:	80 40       	sbci	r24, 0x00	; 0
+ 250:	90 40       	sbci	r25, 0x00	; 0
+ 252:	e1 f7       	brne	.-8      	; 0x24c <main+0x16>
+ 254:	00 c0       	rjmp	.+0      	; 0x256 <main+0x20>
+ 256:	00 00       	nop
+		
+	_delay_ms(1000);
+	i2c_init();
+ 258:	13 df       	rcall	.-474    	; 0x80 <i2c_init>
+	
+	i2c_start();
+ 25a:	1e df       	rcall	.-452    	; 0x98 <i2c_start>
+	
+	i2c_send(0b01001110);
+ 25c:	8e e4       	ldi	r24, 0x4E	; 78
+ 25e:	2f df       	rcall	.-418    	; 0xbe <i2c_send>
+	uart_send(i2c_get_ack());
+ 260:	4d df       	rcall	.-358    	; 0xfc <i2c_get_ack>
+ 262:	06 df       	rcall	.-500    	; 0x70 <uart_send>
+	i2c_send(0xFF);
+ 264:	8f ef       	ldi	r24, 0xFF	; 255
+ 266:	2b df       	rcall	.-426    	; 0xbe <i2c_send>
+	uart_send(i2c_get_ack());
+ 268:	49 df       	rcall	.-366    	; 0xfc <i2c_get_ack>
+ 26a:	02 df       	rcall	.-508    	; 0x70 <uart_send>
+	uart_send('s');
+ 26c:	83 e7       	ldi	r24, 0x73	; 115
+ 26e:	00 df       	rcall	.-512    	; 0x70 <uart_send>
+	lcd_init();
+ 270:	93 df       	rcall	.-218    	; 0x198 <lcd_init>
+	
+	
+	lcd_print('H');
+ 272:	88 e4       	ldi	r24, 0x48	; 72
+ 274:	c6 df       	rcall	.-116    	; 0x202 <lcd_print>
+	lcd_print('e');
+ 276:	85 e6       	ldi	r24, 0x65	; 101
+ 278:	c4 df       	rcall	.-120    	; 0x202 <lcd_print>
+	lcd_print('l');
+ 27a:	8c e6       	ldi	r24, 0x6C	; 108
+ 27c:	c2 df       	rcall	.-124    	; 0x202 <lcd_print>
+	lcd_print('l');
+ 27e:	8c e6       	ldi	r24, 0x6C	; 108
+ 280:	c0 df       	rcall	.-128    	; 0x202 <lcd_print>
+	lcd_print('o');
+ 282:	8f e6       	ldi	r24, 0x6F	; 111
+ 284:	be df       	rcall	.-132    	; 0x202 <lcd_print>
+	
+	lcd_print(' ');
+ 286:	80 e2       	ldi	r24, 0x20	; 32
+ 288:	bc df       	rcall	.-136    	; 0x202 <lcd_print>
+	lcd_print('w');
+ 28a:	87 e7       	ldi	r24, 0x77	; 119
+ 28c:	ba df       	rcall	.-140    	; 0x202 <lcd_print>
+	lcd_print('o');
+ 28e:	8f e6       	ldi	r24, 0x6F	; 111
+ 290:	b8 df       	rcall	.-144    	; 0x202 <lcd_print>
+	lcd_print('r');
+ 292:	82 e7       	ldi	r24, 0x72	; 114
+ 294:	b6 df       	rcall	.-148    	; 0x202 <lcd_print>
+	lcd_print('l');
+ 296:	8c e6       	ldi	r24, 0x6C	; 108
+ 298:	b4 df       	rcall	.-152    	; 0x202 <lcd_print>
+	lcd_print('d');
+ 29a:	84 e6       	ldi	r24, 0x64	; 100
+ 29c:	b2 df       	rcall	.-156    	; 0x202 <lcd_print>
+	lcd_print('!');
+ 29e:	81 e2       	ldi	r24, 0x21	; 33
+ 2a0:	b0 df       	rcall	.-160    	; 0x202 <lcd_print>
+
+
+	i2c_stop();
+ 2a2:	4c df       	rcall	.-360    	; 0x13c <i2c_stop>
+	sei(); //глобальное разрешение прерываний
+ 2a4:	78 94       	sei
+    while (1) 
+    {
+		unsigned char mes = uart_receive();
+ 2a6:	e8 de       	rcall	.-560    	; 0x78 <uart_receive>
+		uart_send(mes);
+ 2a8:	e3 de       	rcall	.-570    	; 0x70 <uart_send>
+ 2aa:	fd cf       	rjmp	.-6      	; 0x2a6 <main+0x70>
+
+000002ac <_exit>:
+ 2ac:	f8 94       	cli
+
+000002ae <__stop_program>:
+ 2ae:	ff cf       	rjmp	.-2      	; 0x2ae <__stop_program>
